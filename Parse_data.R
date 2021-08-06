@@ -1,0 +1,19 @@
+source("LoadLibraries.R")
+source("SharedFunctions.R")
+
+GSE20181 <- parseGSE("GSE20181")
+GSE11121 <- parseGSE("GSE11121")
+GSE1561 <- parseGSE("GSE1561")
+GSE2109 <- parseGSE("GSE2109")
+GSE22513 <- parseGSE("GSE22513")
+GSE2603 <- parseGSE("GSE2603")
+GSE28796 <- parseGSE("GSE28796")
+GSE28821 <- parseGSE("GSE28821")
+GSE2990 <- parseGSE("GSE2990")
+GSE3494 <- parseGSE("GSE3494")
+GSE5364 <- parseGSE("GSE5364")
+GSE7390 <- parseGSE("GSE7390")
+GSE7904 <- parseGSE("GSE7904")
+GSE86374 <- parseGSE("GSE86374")
+
+#GSE118646
