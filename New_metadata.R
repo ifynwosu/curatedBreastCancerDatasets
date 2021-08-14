@@ -1,4 +1,3 @@
-history(Inf)
 
 
 source("LoadLibraries.R")
@@ -65,26 +64,24 @@ Metabric_clinical_patient <- read_tsv("C:/Users/DrPanks/Desktop/Datasets/Metabri
 Expr_Data <- read_tsv("C:/Users/DrPanks/Desktop/Datasets/Metabric/data_expression_median.txt")
 
 #GEO
-head_names <- as.data.frame(names(GSE6532_B))
-         
+
 #pData(X) ## print the sample information
 #fData(X) ## print the gene annotation
 #exprs(X) ## print the expression data
 
-GSE7390 <- getGEO('GSE7390')
+GSE7390 <- getGEO('GSE2990')
 
 #GSE6532
 GSE6532 <- getGEO('GSE6532')
-GSE6532_GPL570_pData <- pData(GSE6532[[1]])
+#Selected GPL96 becaust in the journal article the authors state that they used was U133A chips
 GSE6532_GPL96_pData <- pData(GSE6532[[2]])
-GSE6532_GPL97_pData <- pData(GSE6532[[3]])
-
-GSE6532_GPL570_exprData <- exprs(GSE6532[[1]])
 GSE6532_GPL96_exprData <- exprs(GSE6532[[2]])
-GSE6532_GPL97_exprData <- exprs(GSE6532[[3]])
+
 
 #GSE35629
+#Paper states that there are 83 samples and the total number across all platforms is 83 as well
 GSE35629 <- getGEO('GSE35629')
+#treat eachPlatform and GES ID combination as separate
 GSE6532_GPL1390_pData <- pData(GSE35629[[1]])
 GSE6532_GPL5325_pData <- pData(GSE35629[[2]])
 GSE6532_GPL887_pData <- pData(GSE35629[[3]])
@@ -96,47 +93,49 @@ GSE6532_GPL887_exprData <- exprs(GSE35629[[3]])
 #GSE41400
 GSE41400 <- getGEO('GSE41400')
 GSE41400_pData <- pData(GSE41400[[1]])
-
 GSE41400_exprData <- exprs(GSE41400[[1]])
 
 #GSE46581
 GSE46581 <- getGEO('GSE46581')
 GSE46581_pData <- pData(GSE46581[[1]])
-
 GSE46581_exprData <- exprs(GSE46581[[1]])
 
 #GSE81540 consists of 2 SubSeries GSE81538 & GSE96058
 GSE81538 <- getGEO('GSE81538')
-GSE81538_GPL11154_pData <- pData(GSE81538[[1]])
-GSE81538_GPL18573_exprData <- exprs(GSE81538[[2]])
+GSE81538_pData <- pData(GSE81538[[1]])
+#expression data empty
+GSE81538_exprData <- exprs(GSE81538[[1]])
 
 #GSE96058
 GSE96058 <- getGEO('GSE96058')
+#treat eachPlatform and GES ID combination as separate
 GSE96058_GPL11154_pData <- pData(GSE96058[[1]])
+GSE96058_GPL18573_pData <- pData(GSE96058[[2]])
+#expression data empty
+GSE96058_GPL11154_exprData <- exprs(GSE96058[[1]])
 GSE96058_GPL18573_exprData <- exprs(GSE96058[[2]])
 
 
 #GSE118646
 GSE118646 <- getGEO('GSE118646')
 GSE118646_pData <- pData(GSE118646[[1]])
-
 GSE118646_exprData <- exprs(GSE118646[[1]])
 
 #GSE5364
 GSE5364 <- getGEO('GSE5364')
 GSE5364_pData <- pData(GSE5364[[1]])
-
 GSE5364_exprData <- exprs(GSE5364[[1]])
 
 #GSE18229
+#treat eachPlatform and GES ID combination as separate
 GSE18229 <- getGEO('GSE18229')
 GSE18229_GPL1390_pData <- pData(GSE18229[[1]])
-GSE18229_GPL1708_pData <- pData(GSE18229[[2]])
+#GSE18229_GPL1708_pData <- pData(GSE18229[[2]])
 GSE18229_GPL5325_pData <- pData(GSE18229[[3]])
 GSE18229_GPL6607_pData <- pData(GSE18229[[4]])
-GSE18229_GPL7504_pData <- pData(GSE18229[[5]])
-GSE18229_GPL7504_pData <- pData(GSE18229[[6]])
-GSE18229_GPL7504_pData <- pData(GSE18229[[7]])
+#GSE18229_GPL7504_pData <- pData(GSE18229[[5]])
+GSE18229_GPL885_pData <- pData(GSE18229[[6]])
+GSE18229_GPL887_pData <- pData(GSE18229[[7]])
 
 GSE18229_GPL1390_exprData <- exprs(GSE18229[[1]])
 GSE18229_GPL5325_exprData <- exprs(GSE18229[[2]])
@@ -168,5 +167,13 @@ GSE81540_18573 <- read_tsv("GSE81540_18573_Annotations.tsv")
 #    rbind(GSE22513) %>% rbind(GSE2603) %>% rbind(GSE28796) %>% rbind(GSE28821) %>% 
 #    rbind(GSE2990) %>% rbind(GSE3494) %>% rbind(GSE7390) %>% rbind(GSE7904) %>% 
 #    rbind(GSE86374)
+
+install.packages("readxl")
+library("readxl")
+unified <- read_excel("unified.xlsx")
+single <- as.data.frame(dplyr::coalesce(unified$`Variable name...1`, unified$`Variable name...3`))
+write_tsv(single, "single.tsv")
+
+
 
 
