@@ -2,7 +2,7 @@ filterVariables <- function(gseID) {
   #Read in metadata TSV file
    metadata <-  read_tsv(paste0("C:/Users/DrPanks/Desktop/Datasets/Refinebio/Data/", gseID, "/metadata_",  gseID, ".tsv")) %>% 
      clean_names() %>% 
-      dplyr::select(c(`experiment_accession`, `refinebio_age`, `refinebio_disease_stage`,
+      dplyr::select(c(`refinebio_accession_code`, `experiment_accession`, `refinebio_age`, `refinebio_disease_stage`,
                     `refinebio_race`, `refinebio_sex`, `refinebio_treatment`, `aol_os_10y`,
                     `angioinv`, `histtype`, `lymp_infil`, `npi`, `surgery_type`, `administration`,
                     `age_at_dx`, `agent`, `all_lymph_nodes`, `binary_5y_met_event`,

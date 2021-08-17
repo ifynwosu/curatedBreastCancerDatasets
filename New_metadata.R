@@ -1,7 +1,7 @@
 
-
 source("LoadLibraries.R")
 source("filterVariables.R")
+source("attributeList.R")
 #head_names <- as.data.frame(names(GSE7390))
 #write_tsv(head_names, "name_List")
 
@@ -11,6 +11,13 @@ source("filterVariables.R")
 #To remove columns with all NA's run the following 2 lines (Method 2)
 #all_na <- function(x) any(!is.na(x))
 #df %>% select_if(all_na)
+
+
+GSE11121 <- filterVariables("GSE11121") %>% attributeList()
+GSE7390 <- filterVariables("GSE7390") %>% attributeList()
+GSE19697 <- filterVariables("GSE19697") %>% attributeList()
+
+big_list <- GSE11121 %>% rbind(GSE7390) %>% rbind(GSE19697)
 
 #RefineBio New Datasets
 GSE1561 <- filterVariables("GSE1561")#
@@ -26,6 +33,16 @@ GSE22513 <- filterVariables("GSE22513")#
 GSE28796 <- filterVariables("GSE28796")#
 GSE28821 <- filterVariables("GSE28821")#
 GSE86374 <- filterVariables("GSE86374")#
+
+GSE11121_mat <- remove_empty(GSE11121$metadata, which = "cols")
+
+GSE11121_mat <- GSE11121_mat %>% pivot_longer(
+  refinebio_disease_stage:t_dmfs,
+  names_to = "Variable",
+  values_to = "Value") %>% 
+  group_by(experiment_accession, Variable) %>%
+  summarise(Min = min(Value), Mean = mean(Value), Max = max(Value))
+
 
 #RefineBio Old Datasets
 GSE1456 <- filterVariables("GSE1456")
@@ -173,6 +190,7 @@ library("readxl")
 unified <- read_excel("unified.xlsx")
 single <- as.data.frame(dplyr::coalesce(unified$`Variable name...1`, unified$`Variable name...3`))
 write_tsv(single, "single.tsv")
+
 
 
 

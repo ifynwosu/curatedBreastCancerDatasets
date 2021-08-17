@@ -1,15 +1,15 @@
 attributeList <- function(Dataset) {
   
-  myMatrix <- remove_empty(Dataset$metadata, which = "cols") %>%
-    group_by(experiment_accession) %>%
-    summarise(across(
-      .col = is.numeric, 
-      .fns = list(Min = min, Mean = mean, Max = max), 
-      .names = "{col}.{fn}")) %>%
-    pivot_longer(
-      cols = !experiment_accession,
-      names_to = "Attribute",
-      values_to = "Value")
+  myMatrix <- remove_empty(Dataset$metadata, which = "cols") 
+  
+  myMatrix <- myMatrix %>% 
+    pivot_longer(3:ncol(myMatrix),
+      names_to = "Variable",
+      values_to = "Value") %>%
+    group_by(experiment_accession, Variable) %>%
+    summarise(Min = min(Value), Mean = mean(Value), Max = max(Value))
+  
+  #.col = is.numeric,
 
    return(myMatrix)
 }
