@@ -1,6 +1,6 @@
 filterVariables <- function(gseID) {
   #Read in metadata TSV file
-   metadata <-  read_tsv(paste0("C:/Users/DrPanks/Desktop/Datasets/Refinebio/Data/", gseID, "/metadata_",  gseID, ".tsv")) %>% 
+   metadata <-  read_tsv(paste0("C:/Users/DrPanks/Desktop/Datasets/Refinebio/Data/", gseID, "/metadata_",  gseID, ".tsv"), na = c("", "NA", "na")) %>% 
      clean_names() %>% 
       dplyr::select(c(`refinebio_accession_code`, `experiment_accession`, `refinebio_age`, `refinebio_disease_stage`,
                     `refinebio_race`, `refinebio_sex`, `refinebio_treatment`, `aol_os_10y`,
@@ -16,7 +16,7 @@ filterVariables <- function(gseID) {
                     `tumor_size_cm`, `vant_veer_signature`, `veridex_risk`))
    
    #metadata <- as.data.frame(colSums(!is.na(metadata)))
-   #The codeline below may give a similar output
+   #The code below may give a similar output
    #df %>% summarise_all(funs(sum(!is.na(.)))
 
   # Read in data TSV file

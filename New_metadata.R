@@ -2,6 +2,7 @@
 source("LoadLibraries.R")
 source("filterVariables.R")
 source("attributeList.R")
+source("attributeCharacter.R")
 #head_names <- as.data.frame(names(GSE7390))
 #write_tsv(head_names, "name_List")
 
@@ -13,7 +14,7 @@ source("attributeList.R")
 #df %>% select_if(all_na)
 
 
-GSE11121 <- filterVariables("GSE11121") %>% attributeList()
+GSE11121 <- filterVariables("GSE11121") %>% attribute()
 GSE7390 <- filterVariables("GSE7390") %>% attributeList()
 GSE19697 <- filterVariables("GSE19697") %>% attributeList()
 
@@ -34,15 +35,31 @@ GSE28796 <- filterVariables("GSE28796")#
 GSE28821 <- filterVariables("GSE28821")#
 GSE86374 <- filterVariables("GSE86374")#
 
-GSE11121_mat <- remove_empty(GSE11121$metadata, which = "cols")
 
-GSE11121_mat <- GSE11121_mat %>% pivot_longer(
-  refinebio_disease_stage:t_dmfs,
+#find no of unique values for each col and if no of unique < 10% num of rows, convert to character
+
+GSE7390 <- filterVariables("GSE7390") #%>% attributeList()
+
+
+GSE7390_mat <- remove_empty(GSE7390$metadata, which = "cols") %>%
+  mutate(refinebio_accession_code = factor(refinebio_accession_code)) %>%
+  mutate(experiment_accession = factor(experiment_accession)) %>%
+  #mutate(refinebio_disease_stage = as.character(refinebio_disease_stage)) %>%
+  select_if(negate(is.character)) 
+
+GSE7390_mat <-GSE7390_mat %>%
+  pivot_longer(
+  cols = 3:ncol(GSE7390_mat),
   names_to = "Variable",
   values_to = "Value") %>% 
   group_by(experiment_accession, Variable) %>%
-  summarise(Min = min(Value), Mean = mean(Value), Max = max(Value))
-
+  summarise(
+    Min = min(Value, na.rm = T), 
+    Mean = mean(Value, na.rm = T), 
+    Max = max(Value, na.rm = T),
+    Num_unique = length(unique(Value))) %>% 
+  dplyr::filter(Num_unique > 10) %>%
+  dplyr::select(-Num_unique)
 
 #RefineBio Old Datasets
 GSE1456 <- filterVariables("GSE1456")
